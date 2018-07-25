@@ -3,12 +3,14 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: {
-    ConnectFour: path.resolve(__dirname, './assets/ConnectFour.js')
+    login: path.join(__dirname, '/assets/Login.js'),
+    ConnectFour: path.join(__dirname, '/assets/ConnectFour.js')
   },
   output: {
-    path: path.resolve(__dirname, './static'),
+    path: path.join(__dirname, '/static'),
     filename: '[name]-bundle.js'
   },
+  devtool: "inline-source-map",
   module: {
     loaders: [
       {
@@ -24,7 +26,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
+          'css-loader?sourceMap'
         ]
       }
     ]
@@ -33,7 +35,7 @@ module.exports = {
       // An array of directory names to be resolved to the current directory
       modules: ['node_modules', path.join(__dirname, '/assets')],
    },
-  plugins: [
-   new webpack.optimize.UglifyJsPlugin(),
-  ]
+  // plugins: [
+  //  new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
+  // ]
 };

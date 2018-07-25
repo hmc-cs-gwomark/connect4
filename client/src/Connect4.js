@@ -1,27 +1,18 @@
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import './ConnectFour.css'
-import io from 'socket.io-client';
+import './Connect4.css';
+import 'socket.io';
 
 const dims = {rows: 6, cols:7};
 
 
-var socket = io('http://localhost:5000')
-
-
-var leaveGame = function() {
-    socket.emit('leave_game', "my name", function(message) {
-        console.log(message);
-    });
-}
+var socket = require('socket.io-client')('http://localhost:5000');
 
 
 /* ReactJS code begins here*/
 function JoinButton(props) {
     return (<button onClick={props.onClick}>Join Game</button>);
 }
-
 
 function Square(props) {
     var sqStyle = {
@@ -83,9 +74,10 @@ class Game extends Component {
 
     componentDidMount() {
         socket.on('init', this._initialize.bind(this));
-        socket.on('move:received', this._handleMove.bind(this));
-        socket.on('player: disconnected')
+        socket.on('move|received', this._handleMove.bind(this));
         socket.on('win|full', this._handleWinFull.bind(this));
+        socket.on('player1', this._makePlayer.bind(this));
+        socket.on('player2', this._makePlayer.bind(this))
     }
 
     _initialize(data) {
@@ -170,4 +162,4 @@ class Connect4 extends Component {
     }
 }
 
-ReactDOM.render(<Connect4 />, document.getElementById('mount-point'))
+export default Connect4;

@@ -1,22 +1,15 @@
-<html>
-  <head>
-    <title>Flask + Celery Examples</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0-alpha1/react.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0-alpha1/JSXTransformer.js"></script>
-    <script type="text/jsx">
-      /*** @jsx React.DOM */
 
+{% block content %}
+<div class="form-div">
+  <h1>Welcome To Connect4!</h1>
+  <form class="reg-form" method="POST">
+    {{ form.hidden_tag()}}
+    {{ form.username(class="reg-form-field")}}
+    <input class="submit-button" type="submit" value="Play!"/>
+  </form>
+</div>
+{% endblock %}
 
-       var FirstComponent = React.createClass({
-           render: function() {
-               return (<p1>Hello world.</p1>);
-           }
-       });
-       React.render(<FirstComponent />, document.getElementById('mount-point') );
-    </script>
-  </head>
-  <body>
-    <h1>Flask + Celery Examples</h1>
-    <div id="mount-point"></div>
-  </body>
-</html>
+{% block scripts %}
+<script type="text/javascript" src="{{url_for('static', filename="login-bundle.js")}}"></script>
+{% endblock %}

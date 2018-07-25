@@ -1,15 +1,14 @@
 from flask import Flask
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
+from .config import configure_app
 
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'SECRET!'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/markov'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+connect4 = Flask(__name__)
+configure_app(connect4, "testing")
 
-db = SQLAlchemy(app)
-socketio = SocketIO(app)
+db = SQLAlchemy(connect4)
+socketio = SocketIO(connect4)
 
-from . import sockets, views
+from . import sockets, views, forms
 from .models import models

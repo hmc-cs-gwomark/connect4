@@ -5,36 +5,36 @@ from sqlalchemy.dialects.postgresql import JSON
 
 class User(db.Model):
     pk_user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120))
+    username = db.Column(db.String(120), unique=True)
+    ipv4_address = db.Column(db.String())
     my_turn = db.Column(db.Boolean)
     fk_lobby = db.Column(db.Integer, db.ForeignKey('lobby.pk_lobby'))
 
-    def __init__(self, username, fk_lobby, my_turn=False):
+    def __init__(self, username, ipv4_address, my_turn=False, fk_lobby=None):
         self.username = username
         self.fk_lobby = fk_lobby
+        self.ipv4_address = ipv4_address
         self.my_turn = my_turn
 
     def __repr__(self):
-        return str(dict(
-        pk_user_id=self.pk_user_id,
+        return "<User " + str(dict(
+        pk_id=self.pk_id,
         username=self.username,
         my_turn=self.my_turn,
-        fk_lobby=self.fk_lobby))
+        fk_lobby=self.fk_lobby)) + " >"
 
 
 
 class Lobby(db.Model):
     pk_lobby = db.Column(db.Integer, primary_key=True)
-    num_players = db.Column(db.Integer)
+    players = db.relationship('User', backref="lobby", lazy="dynamic")
+    moves = db.relationship('User', backref="lobby", lazy="dynamic")
 
-    def __init__(self, num_players=0):
-        self.num_players
 
     def __repr__(self):
-        return str(dict(
+        return "<Lobby " + str(dict(
         pk_lobby = self.pk_lobby,
-        ))
-
+        )) + " >"
 
 NestedMutableDict.associate_with(JsonEncodedDict)
 
@@ -55,3 +55,20 @@ class Moves(db.Model):
         board=self.board,
         turn=self.turn,
         fk_lobby=self.fk_lobby))
+
+
+def clear_lobby(lobby_id):
+    lobby = Lobby.query.get(lobby_id)
+    for move in lobby.moves:
+        db.session.delete(move)
+
+    for player in lobby.players:
+        db.session.delete(player)
+
+    db.session.commit()
+
+def clear_all_lobbies():
+    lobbies = Lobby.query.all()
+    for lobby in lobbies:
+        db.session.delete(lobby)
+    db.session.commit()
