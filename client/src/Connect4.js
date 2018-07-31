@@ -114,11 +114,6 @@ class Game extends Component {
         }
     }
 
-    findGame() {
-        socket.emit('look_for_game', "my name", function(message) {
-            console.log(message);
-        });
-    }
 
     handleClick(i, j) {
         if (!this.state.myTurn || this.state.winner || this.state.full) {

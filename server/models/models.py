@@ -5,8 +5,8 @@ from sqlalchemy.dialects.postgresql import JSON
 
 class User(db.Model):
     pk_user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True)
-    ipv4_address = db.Column(db.String())
+    username = db.Column(db.String(120))
+    ipv4_address = db.Column(db.String(), unique=True)
     my_turn = db.Column(db.Boolean)
     fk_lobby = db.Column(db.Integer, db.ForeignKey('lobby.pk_lobby'))
 
@@ -28,7 +28,7 @@ class User(db.Model):
 class Lobby(db.Model):
     pk_lobby = db.Column(db.Integer, primary_key=True)
     players = db.relationship('User', backref="lobby", lazy="dynamic")
-    moves = db.relationship('User', backref="lobby", lazy="dynamic")
+    moves = db.relationship('Moves', backref="lobby", lazy="dynamic")
 
 
     def __repr__(self):

@@ -21,25 +21,34 @@ def connected():
 
 @socketio.on('disconnect')
 def disconnect():
-    ip = session['ip']
-    user = User.query.filter_by(ipv4_address=ip).first()
-    if not user:
-        #TODO: THROW ERROR
+    try:
+        ip = session['ip']
+        user = User.query.filter_by(ipv4_address=ip).first()
+        if not user:
+            #TODO: THROW ERROR
+            pass
+        clear_lobbies(user.fk_lobby)
+
+        # let other players know room is disconnected
+        # We could accomplish this by sending a message to the user saying they're disconnected
+        # then add an event which handles the player left in the lobby
+        db.session.delete(user)
+        db.session.commit()
+        emit('')
+    except:
         pass
-    clear_lobbies(user.fk_lobby)
-
-    # let other players know room is disconnected
-    # We could accomplish this by sending a message to the user saying they're disconnected
-    # then add an event which handles the player left in the lobby
-    db.session.delete(user)
-    db.session.commit()
-    emit('')
 
 
-@socketio.on('look_for_game')
+@socketio.on('find_game')
 def find_game(name):
+    # TODO verify that the user isn't already playing a game
+    # TODO decide whether or not to use ajax on form
+    # Make rest API to use with ajax
+
     # Sent by user from form
     username = data['username']
+    ipv4_address = request.remote_addr
+    new_user = User(username, ipv4_address)
 
     # Look for available lobbys, let the user know if none can be found
     avail_lobbys = Lobby.query.filter(Lobby.num_players < 2).order_by(Lobby.num_players.desc()).all()
@@ -54,7 +63,6 @@ def find_game(name):
         #store user info in session
         session['ox'] = 'X'
         session['player'] = True
-        emit('player1', {'turn':True}, room=request.sid)
 
     else:
         # Otherwise find the first available lobby, and join the room with the lobby's name as player 2

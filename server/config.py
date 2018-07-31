@@ -32,5 +32,5 @@ config = {
 
 def configure_app(app, config_name=""):
     if not config_name:
-        config_name = ogetenv("FLASK_CONFIG", "default")
+        config_name = getenv("FLASK_CONFIG", "default")
     app.config.from_object(config[config_name])

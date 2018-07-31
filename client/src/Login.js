@@ -49,8 +49,9 @@ class LoginForm extends Component {
     super(props);
     this.state = {
       username: '',
-      success:false,
-      openWait:false
+      validUser:false,
+      openWait:false,
+      error:false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -58,12 +59,28 @@ class LoginForm extends Component {
   }
 
   handleChange(event) {
-    this.setState({username: event.target.value});
+    var validUser = true;
+    $.getJSON('/connect4/api/users')
+    .done(function() {
+      validUser = false;
+    })
+
+    this.setState({username: event.target.value, success:success});
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({openWait:true});
+    // post form to create user
+    // if succuesfull post then open wait
+    // if not say unable to create user
+    if (this.state.success) {
+      $.post('/connect4/api/users', { username: username })
+      .done(function() {
+        this.setState({openWait:true});
+      })
+    } else {
+      this.setState({error: true})
+    }
   }
 
 
@@ -71,6 +88,13 @@ class LoginForm extends Component {
     if (this.state.openWait){
       return (<Redirect to='/wait'/>)
     }
+
+    // Display an error message if the client is already playing a game
+    var errorMessage = false;
+    if (!this.state.validUser || !this.state.error) {
+      errorMessage = <h3>User with this IP already palying</h3>
+    }
+
     return (
       <div className="form-div">
         <h1>Welcome To Connect4!</h1>
@@ -78,6 +102,7 @@ class LoginForm extends Component {
           <input className="reg-form-field" name="username" placeholder="Username" value={this.state.username} onChange={this.handleChange}/>
           <input className="submit-button" type="submit" value="Play!"/>
         </form>
+        {errorMessage}
       </div>
     )
   }

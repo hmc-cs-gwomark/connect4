@@ -56,8 +56,6 @@ class FoundMatch extends Component {
     }.bind(this), 1000);
   }
 
-
-
   componentWillUnmount(){
     // Clear interval to stop countdown
     clearInterval(this.interval);
@@ -82,6 +80,12 @@ class WaitingMenu extends Component {
   constructor(props) {
     super(props);
 
+    // 1 1/2 mins till time out
+    this.timeOutSeconds = 65000;
+
+    // Variable to hold timeout object for cancelling
+    this.timeout = null;
+
     // Pass the instance of this class to the function defined below with bind
     this.handleSearchFail = this.handleSearchFail.bind(this);
     this.handleGameStart = this.handleGameStart.bind(this);
@@ -99,10 +103,15 @@ class WaitingMenu extends Component {
   }
 
   componentDidMount() {
-    // socket.on('search|fail', this.handleSearchFail);
-    // socket.on('search|success', this.handleGameStart);
-  }
+    // Bind function to found match event
+    socket.on('search|success', this.handleGameStart);
 
+    // Let the server know we want to find a game
+    socket.emit('find_game');
+
+    // Wait to find a match for the specified amount of time
+    this.timeout = setTimeout(this.handleSearchFail, this.timeOutSeconds);
+  }
 
   handleSearchFail(data) {
     this.setState({waiting: false});
@@ -110,6 +119,9 @@ class WaitingMenu extends Component {
 
   //Redirects players to their game when it has finally started
   handleGameStart(data) {
+    if (this.timeOut){
+      clearTimeout(this.timeout);
+    }
     this.setState({waiting: false, foundGame:true});
   }
 
