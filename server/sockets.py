@@ -25,8 +25,7 @@ def disconnect():
         ip = session['ip']
         user = User.query.filter_by(ipv4_address=ip).first()
         if not user:
-            #TODO: THROW ERROR
-            pass
+            raise Exception()
         clear_lobbies(user.fk_lobby)
 
         # let other players know room is disconnected
@@ -34,9 +33,9 @@ def disconnect():
         # then add an event which handles the player left in the lobby
         db.session.delete(user)
         db.session.commit()
-        emit('')
+        return 'we disconnected'
     except:
-        pass
+        return 'Failed to delete user'
 
 
 @socketio.on('find_game')
@@ -44,41 +43,39 @@ def find_game(name):
     # TODO verify that the user isn't already playing a game
     # TODO decide whether or not to use ajax on form
     # Make rest API to use with ajax
+    return "we're looking for a game"
+    
+   
 
-    # Sent by user from form
-    username = data['username']
-    ipv4_address = request.remote_addr
-    new_user = User(username, ipv4_address)
-
-    # Look for available lobbys, let the user know if none can be found
-    avail_lobbys = Lobby.query.filter(Lobby.num_players < 2).order_by(Lobby.num_players.desc()).all()
-    if not avail_lobbys:
-        # Create new lobby and set player 1
-        lobby = Lobby()
-        db.session.add(new_lobby)
-        lobby.players[0] = request.sid
-        db.session.commit()
+    # # Look for available lobbys, let the user know if none can be found
+    # avail_lobbys = Lobby.query.filter(Lobby.num_players < 2).order_by(Lobby.num_players.desc()).all()
+    # if not avail_lobbys:
+    #     # Create new lobby and set player 1
+    #     lobby = Lobby()
+    #     db.session.add(new_lobby)
+    #     lobby.players[0] = request.sid
+    #     db.session.commit()
 
 
-        #store user info in session
-        session['ox'] = 'X'
-        session['player'] = True
+    #     #store user info in session
+    #     session['ox'] = 'X'
+    #     session['player'] = True
 
-    else:
-        # Otherwise find the first available lobby, and join the room with the lobby's name as player 2
-        lobby = avail_lobbys[0]
-        lobby.player2 = request.sid
-        lobby.is_full = True
-        db.session.commit()
-        session['ox'] = 'O'
-        emit('player2', {'turn':False}, room=request.sid)
-        emit('game started', room=room)
-    room = "connect-4-gwomark" + str(lobby.pk_lobby)
-    join_room(room)
+    # else:
+    #     # Otherwise find the first available lobby, and join the room with the lobby's name as player 2
+    #     lobby = avail_lobbys[0]
+    #     lobby.player2 = request.sid
+    #     lobby.is_full = True
+    #     db.session.commit()
+    #     session['ox'] = 'O'
+    #     emit('player2', {'turn':False}, room=request.sid)
+    #     emit('game started', room=room)
+    # room = "connect-4-gwomark" + str(lobby.pk_lobby)
+    # join_room(room)
 
-    # store lobbby information in the users session
-    session['lobby'] = lobby.pk_lobby
-    session['room'] = room
+    # # store lobbby information in the users session
+    # session['lobby'] = lobby.pk_lobby
+    # session['room'] = room
 
 
 

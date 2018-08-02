@@ -58,6 +58,8 @@ class LoginForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+
+  // Handles change of form input
   handleChange(event) {
     var validUser = true;
     $.getJSON('/connect4/api/users')
@@ -65,22 +67,26 @@ class LoginForm extends Component {
       validUser = false;
     })
 
-    this.setState({username: event.target.value, success:success});
+    this.setState({'username': event.target.value, 'success':success});
   }
 
+
+  //Handles form submit
   handleSubmit(event) {
     event.preventDefault();
-    // post form to create user
+
     // if succuesfull post then open wait
     // if not say unable to create user
     if (this.state.success) {
       $.post('/connect4/api/users', { username: username })
       .done(function() {
-        this.setState({openWait:true});
+        this.setState({'openWait': true});
       })
-    } else {
-      this.setState({error: true})
+      .fail(function() {
+        this.setState({'error': true})
+      })
     }
+
   }
 
 

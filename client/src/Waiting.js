@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {withRouter, Redirect} from 'react-router-dom';
+import 'socket.io';
+
+var socket = require('socket.io-client')('http://localhost:5000');
 
 
 
@@ -31,6 +34,7 @@ function MatchNotFound(props){
 }
 
 
+
 // Code to run if match is found
 class FoundMatch extends Component {
   constructor(props) {
@@ -45,13 +49,13 @@ class FoundMatch extends Component {
     this.interval = null;
 
     // Start match in 5 seconds
-    setTimeout(function() {
+    setTimeout( function() {
       this.setState({startMatch: true});
     }.bind(this), 5000);
 
 
     // Start Countdown
-    this.interval = setInterval(function() { 
+    this.interval = setInterval( function() { 
       this.setState({seconds:this.state.seconds - 1}) 
     }.bind(this), 1000);
   }
@@ -107,7 +111,9 @@ class WaitingMenu extends Component {
     socket.on('search|success', this.handleGameStart);
 
     // Let the server know we want to find a game
-    socket.emit('find_game');
+    socket.emit('find_game', (data) => {
+      console.log(data);
+    });
 
     // Wait to find a match for the specified amount of time
     this.timeout = setTimeout(this.handleSearchFail, this.timeOutSeconds);
