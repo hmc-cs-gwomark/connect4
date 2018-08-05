@@ -1,15 +1,9 @@
 
 {% block content %}
-<div class="form-div">
-  <h1>Welcome To Connect4!</h1>
-  <form class="reg-form" method="POST">
-    {{ form.hidden_tag()}}
-    {{ form.username(class="reg-form-field")}}
-    <input class="submit-button" type="submit" value="Play!"/>
-  </form>
+<div id = "root">
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{url_for('static', filename="login-bundle.js")}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename="index-bundle.js")}}"></script>
 {% endblock %}

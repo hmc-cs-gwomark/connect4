@@ -1,5 +1,5 @@
 from . import db, socketio
-from server.models.models import User, Lobby
+from server.models.models import User, Lobby, clear_lobby
 from server.hwscripts.test import Board
 from .resources import clear_moves, to_ox
 from flask import session, request, g
@@ -15,27 +15,13 @@ CONNECT4_HEIGHT = 6
 
 @socketio.on('connect')
 def connected():
-    emit('connected', {'data':'connected'})
+    pass
 
 
 
 @socketio.on('disconnect')
 def disconnect():
-    try:
-        ip = session['ip']
-        user = User.query.filter_by(ipv4_address=ip).first()
-        if not user:
-            raise Exception()
-        clear_lobbies(user.fk_lobby)
-
-        # let other players know room is disconnected
-        # We could accomplish this by sending a message to the user saying they're disconnected
-        # then add an event which handles the player left in the lobby
-        db.session.delete(user)
-        db.session.commit()
-        return 'we disconnected'
-    except:
-        return 'Failed to delete user'
+    pass
 
 
 @socketio.on('find_game')

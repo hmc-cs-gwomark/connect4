@@ -4,7 +4,10 @@ const webpack = require('webpack')
 module.exports = {
   entry: {
     login: path.join(__dirname, '/assets/Login.js'),
-    ConnectFour: path.join(__dirname, '/assets/ConnectFour.js')
+    connectFour: path.join(__dirname, '/assets/ConnectFour.js'),
+    waiting: path.join(__dirname, '/assets/Waiting.js'),
+    index: path.join(__dirname, 'assets/index.js'),
+    serviceWorker: path.join(__dirname, 'assets/registerServiceWorker.js')
   },
   output: {
     path: path.join(__dirname, '/static'),
@@ -12,7 +15,7 @@ module.exports = {
   },
   devtool: "inline-source-map",
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(js|jsx)$/,
         loaders: 'babel-loader',

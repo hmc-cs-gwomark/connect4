@@ -10,6 +10,7 @@ class User(db.Model):
     my_turn = db.Column(db.Boolean)
     fk_lobby = db.Column(db.Integer, db.ForeignKey('lobby.pk_lobby'))
 
+
     def __init__(self, username, ipv4_address, my_turn=False, fk_lobby=None):
         self.username = username
         self.fk_lobby = fk_lobby
@@ -59,6 +60,8 @@ class Moves(db.Model):
 
 def clear_lobby(lobby_id):
     lobby = Lobby.query.get(lobby_id)
+    if not lobby:
+        return None
     for move in lobby.moves:
         db.session.delete(move)
 
