@@ -1,7 +1,9 @@
 const path = require('path');
 const webpack = require('webpack')
+var CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   entry: {
     login: path.join(__dirname, '/assets/Login.js'),
     connectFour: path.join(__dirname, '/assets/ConnectFour.js'),
@@ -38,7 +40,21 @@ module.exports = {
       // An array of directory names to be resolved to the current directory
       modules: ['node_modules', path.join(__dirname, '/assets')],
    },
-  // plugins: [
-  //  new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
-  // ]
+  plugins: [
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8})
+
+  ],
+  optimization: {
+    minimize: true,
+    nodeEnv: 'production',
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
+
 };

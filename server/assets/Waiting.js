@@ -12,9 +12,11 @@ function SpinningCircles(props) {
 // HTML to display while waiting for match
 function WaitingForMatch(props) {
   return (
-    <h1>Waiting for user to join...</h1>
-    // Ideally add spinning circles here
-    <button onClick={props.onGoBack}> Back to Main Menu </>
+    <div>
+      <h1>Waiting for user to join...</h1>
+      // Ideally add spinning circles here
+      <button onClick={props.onGoBack}> Back to Main Menu </button>
+    </div>
   )
 }
 
