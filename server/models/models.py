@@ -1,14 +1,19 @@
 from server import db
 from server.models.mutables import JsonEncodedDict, NestedMutableDict
+from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import JSON
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     pk_user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120))
     ipv4_address = db.Column(db.String(), unique=True)
     my_turn = db.Column(db.Boolean)
     fk_lobby = db.Column(db.Integer, db.ForeignKey('lobby.pk_lobby'))
+
+    @property
+    def id(self):
+        return pk_user_id
 
 
     def __init__(self, username, ipv4_address, my_turn=False, fk_lobby=None):
@@ -16,7 +21,7 @@ class User(db.Model):
         self.fk_lobby = fk_lobby
         self.ipv4_address = ipv4_address
         self.my_turn = my_turn
-
+        
     def __repr__(self):
         return "<User " + str(dict(
         pk_id=self.pk_id,

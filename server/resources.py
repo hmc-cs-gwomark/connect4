@@ -31,4 +31,7 @@ def clear_lobbys():
         lobby.player1 = None
         lobby.player2 = None
     db.session.commit()
+
+
+
     

@@ -20,6 +20,16 @@ def index():
     return render_template('index.html')
 
 
+@connect4.route('/wait', methods=['GET'])
+def wait():
+    return render_template('index.html')
+
+
+@connect4.route('/play', methods=['GET'])
+def play():
+    return render_template('index.html')
+
+
 # Route specifically for ajax stuff to verify users
 @connect4.route('/connect4/api/users', defaults={'user_id': None}, methods=['GET', 'POST', 'DELETE'])
 @connect4.route('/connect4/api/users/', defaults={'user_id': None}, methods=['GET', 'POST'])
@@ -35,6 +45,7 @@ def get_user_by_ip(user_id):
             user = User(username, ipv4_address)
             db.session.add(user)
             db.session.commit()
+            login_user(user)
             return make_user_json(user)
         except:
             return make_response(jsonify({'error': 'Failed to create user name'}), 404)

@@ -1,10 +1,9 @@
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './ConnectFour.css';
 
 const dims = {rows: 6, cols:7};
 
-var socket = require('socket.io-client')('http://localhost:5000');
 
 /* ReactJS code begins here*/
 function JoinButton(props) {

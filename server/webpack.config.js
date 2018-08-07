@@ -6,8 +6,7 @@ module.exports = {
   mode: 'production',
   entry: {
     login: path.join(__dirname, '/assets/Login.js'),
-    connectFour: path.join(__dirname, '/assets/ConnectFour.js'),
-    waiting: path.join(__dirname, '/assets/Waiting.js'),
+    game: path.join(__dirname, '/assets/Game.js'),
     index: path.join(__dirname, 'assets/index.js'),
     serviceWorker: path.join(__dirname, 'assets/registerServiceWorker.js')
   },

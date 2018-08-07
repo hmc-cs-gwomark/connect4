@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import Connect4 from './ConnectFour';
+import Connect4 from './Game';
 import LoginForm from './Login';
-import WaitingMenu from './Waiting';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
@@ -13,7 +12,6 @@ const Main = () => (
     <Switch>
       <Route exact path='/' component={LoginForm}/>
       <Route path='/play' component={Connect4}/>
-      <Route path='/wait' component={WaitingMenu} />
     </Switch>
   </main>
 )
